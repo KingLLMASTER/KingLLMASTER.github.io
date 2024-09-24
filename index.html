@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration des Packs</title>
+  <link rel="stylesheet" href="admin-styles.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="header-left"></div>
+    <h1>Administration des Packs</h1>
+    <div class="header-icons">
+      <span id="lockIcon" class="material-icons" onclick="promptForCode()" aria-label="Verrouiller l'administration" role="button" tabindex="0">lock</span>
+      <span id="darkModeToggle" class="material-icons" aria-label="Basculer le mode sombre" role="button" tabindex="0">dark_mode</span>
+    </div>
+  </header>
+  
+  <main>
+    <div class="container">
+      <!-- Colonne de gauche : Modifications -->
+      <div class="left-column">
+        <section id="fileLoader">
+          <h2>Charger le fichier de données (optionnel)</h2>
+          <label for="fileInput">Fichier de données (optionnel)</label>
+          <input type="file" id="fileInput" accept=".js" aria-describedby="fileHelp">
+          <p id="fileHelp">Vous pouvez commencer à créer de nouvelles données sans charger de fichier.</p>
+        </section>
+        
+        <!-- Grille de Sélection 2x2 -->
+        <div class="selection-grid">
+          <div class="selection-box">
+            <h3>Sélectionnez un Pack</h3>
+            <label for="packSelect">Pack</label>
+            <select id="packSelect">
+              <option value="">Sélectionnez un pack</option>
+            </select>
+            <button id="renamePackButton">Renommer le pack</button>
+            <button id="deletePackButton">Supprimer le pack</button>
+          </div>
+          
+          <div class="selection-box">
+            <h3>Sélectionnez un Jeu</h3>
+            <label for="gameSelect">Jeu</label>
+            <select id="gameSelect">
+              <option value="">Sélectionnez un jeu</option>
+            </select>
+            <button id="renameGameButton">Renommer le jeu</button>
+            <button id="deleteGameButton">Supprimer le jeu</button>
+          </div>
+          
+          <div class="selection-box">
+            <h3>Sélectionnez une Option</h3>
+            <label for="optionSelect">Option</label>
+            <select id="optionSelect">
+              <option value="">Sélectionnez une option</option>
+            </select>
+            <button id="renameOptionButton">Renommer l'option</button>
+            <button id="deleteOptionButton">Supprimer l'option</button>
+          </div>
+          
+          <div class="selection-box">
+            <h3>Sélectionnez une Tranche d'Âge</h3>
+            <label for="ageSelect">Âge</label>
+            <select id="ageSelect">
+              <option value="">Sélectionnez une tranche d'âge</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Section des Prix -->
+        <section id="priceSection">
+          <h2>Prix par Tranche d'Âge</h2>
+          <div id="priceContainer">
+            <!-- Les champs de prix seront générés dynamiquement -->
+          </div>
+        </section>
+        
+        <!-- Section des Liens de Réservation -->
+        <section id="linkSection">
+          <h2>Lien de Réservation</h2>
+          <div id="linkInputContainer">
+            <label for="reservationLink">URL de réservation</label>
+            <input type="url" id="reservationLink" placeholder="Entrez le lien de réservation">
+          </div>
+          <button id="updateLinkButton">Mettre à jour le lien</button>
+        </section>
+        
+        <!-- Section Multilingue -->
+        <section id="languageSection">
+          <h2>Contenu Multilingue</h2>
+          <div class="language-tabs">
+            <button class="language-tab active" data-lang="fr">FR</button>
+            <button class="language-tab" data-lang="nl">NL</button>
+            <button class="language-tab" data-lang="en">EN</button>
+          </div>
+          <h3>Temps sur place (unifié)</h3>
+          <input id="timeOnSiteValue" type="number" placeholder="Entrez le temps en minutes" min="1">
+          <!-- Contenu pour le français -->
+          <div class="language-content active" data-lang="fr">
+            <h3>Nom du Pack (FR)</h3>
+            <input id="packName_fr" type="text" placeholder="Nom du pack en français">
+
+            <h3>Message d'avertissement (FR)</h3>
+            <textarea id="warningTextInput_fr" placeholder="Entrez un message d'avertissement"></textarea>
+            <button id="deleteWarningButton_fr">Supprimer le message d'avertissement (FR)</button>  <!-- Ce bouton est important -->
+
+            <!-- Inclusions et Options supplémentaires en colonnes -->
+            <div class="inclus-options-modification-container" style="display: flex; justify-content: space-between;">
+                <div class="inclus-column" style="flex: 1; margin-right: 10px;">
+                    <h3>Inclus (FR)</h3>
+                    <ul id="inclusList_fr"></ul>  <!-- Liste des inclusions -->
+                    <input id="newInclusInput_fr" type="text" placeholder="Nouvel élément inclus (FR)">
+                    <button id="addInclusButton_fr">Ajouter Inclus (FR)</button>
+                </div>
+                <div class="options-column" style="flex: 1; margin-left: 10px;">
+                    <h3>Options supplémentaires (FR)</h3>
+                    <ul id="optionsList_fr"></ul>  <!-- Liste des options -->
+                    <input id="newOptionInput_fr" type="text" placeholder="Nouvelle option (FR)">
+                    <button id="addOptionButton_fr">Ajouter Option (FR)</button>
+                </div>
+            </div>
+          </div>
+          <!-- Contenu pour le néerlandais -->
+          <div class="language-content" data-lang="nl" style="display:none;">
+            <h3>Nom du Pack (NL)</h3>
+            <input id="packName_nl" type="text" placeholder="Packnaam in het Nederlands">
+
+            <h3>Message d'avertissement (NL)</h3>
+            <textarea id="warningTextInput_nl" placeholder="Voer een waarschuwingsbericht in"></textarea>
+            <button id="deleteWarningButton_nl">Verwijder waarschuwing (NL)</button>
+
+            <!-- Inclusions et Options supplémentaires en colonnes -->
+            <div class="inclus-options-modification-container" style="display: flex; justify-content: space-between;">
+                <div class="inclus-column" style="flex: 1; margin-right: 10px;">
+                    <h3>Inclus (NL)</h3>
+                    <ul id="inclusList_nl"></ul> <!-- Liste des inclusions -->
+                    <input id="newInclusInput_nl" type="text" placeholder="Nieuw inbegrepen item (NL)">
+                    <button id="addInclusButton_nl">Toevoegen Inclus (NL)</button>
+                </div>
+                <div class="options-column" style="flex: 1; margin-left: 10px;">
+                    <h3>Options supplémentaires (NL)</h3>
+                    <ul id="optionsList_nl"></ul> <!-- Liste des options -->
+                    <input id="newOptionInput_nl" type="text" placeholder="Nieuwe optie (NL)">
+                    <button id="addOptionButton_nl">Toevoegen Optie (NL)</button>
+                </div>
+            </div>
+          </div>
+        <!-- Contenu pour l'anglais -->
+        <div class="language-content" data-lang="en" style="display:none;">
+          <h3>Pack Name (EN)</h3>
+          <input id="packName_en" type="text" placeholder="Pack name in English">
+
+          <h3>Warning Message (EN)</h3>
+          <textarea id="warningTextInput_en" placeholder="Enter a warning message"></textarea>
+          <button id="deleteWarningButton_en">Delete Warning Message (EN)</button>
+
+          <!-- Inclusions et Options supplémentaires en colonnes -->
+          <div class="inclus-options-modification-container" style="display: flex; justify-content: space-between;">
+              <div class="inclus-column" style="flex: 1; margin-right: 10px;">
+                  <h3>Included (EN)</h3>
+                  <ul id="inclusList_en"></ul> <!-- Liste des inclusions -->
+                  <input id="newInclusInput_en" type="text" placeholder="New included item (EN)">
+                  <button id="addInclusButton_en">Add Included (EN)</button>
+              </div>
+              <div class="options-column" style="flex: 1; margin-left: 10px;">
+                  <h3>Additional Options (EN)</h3>
+                  <ul id="optionsList_en"></ul> <!-- Liste des options -->
+                  <input id="newOptionInput_en" type="text" placeholder="New option (EN)">
+                  <button id="addOptionButton_en">Add Option (EN)</button>
+              </div>
+          </div>
+        </div>
+          <button id="renamePackNamesButton">Sauvegarder les noms du pack</button>
+        </section>
+      </div>
+      <!-- Colonne Centrale : Création de Pack/Formule -->
+      <div class="center-column" id="centerColumn">
+        <section id="creationTools">
+          <section id="newPackCreation">
+            <h2>Création de nouvelles formules</h2>
+            <label for="nouveauPack">Nom du nouveau pack</label>
+            <input type="text" id="nouveauPack" placeholder="Nom du nouveau pack">
+            <button id="creerNouveauPackButton">Créer nouveau pack</button>
+          </section>
+
+          <section id="newGameOption">
+            <h3>Ajout de jeu ou option à un pack existant</h3>
+            <label for="packExistantSelect">Pack existant</label>
+            <select id="packExistantSelect">
+              <option value="">Sélectionnez un pack</option>
+            </select>
+            <label for="jeuExistantSelect">Jeu existant</label>
+            <select id="jeuExistantSelect">
+              <option value="">Jeu existant</option>
+            </select>
+            <label for="nouveauJeuInput">Nom du nouveau jeu</label>
+            <input type="text" id="nouveauJeuInput" placeholder="Nom du nouveau jeu">
+            <label for="nouvelleOptionInput">Nouvelle option</label>
+            <input type="text" id="nouvelleOptionInput" placeholder="Nouvelle option">
+            <button id="ajouterJeuOptionButton">Ajouter jeu/option</button>
+          </section>
+
+          <section id="languageManagement">
+            <h3>Ajouter une nouvelle langue</h3>
+            <label for="newLanguageCode">Code de la langue</label>
+            <input type="text" id="newLanguageCode" placeholder="Code de la langue (e.g., 'es')">
+            <button id="addLanguageButton">Ajouter la langue</button>
+          </section>
+        </section>
+      </div>
+      <!-- Colonne de droite : Aperçu -->
+      <div class="right-column">
+        <section id="previewPanel">
+          <h2>Aperçu</h2>
+          <div id="previewCard">
+            <h3 id="previewTitle">Titre du Pack</h3>
+            <p id="previewTime">⏱️ Temps sur place : Non défini</p> <!-- Élément ajouté -->
+            <p id="previewPrice">Prix</p>
+            
+            <!-- Ajouter ici l'élément pour les inclus -->
+            <h4>Inclus</h4>
+            <ul id="previewInclus"></ul> <!-- Élément manquant ajouté -->
+    
+            <!-- Ajouter ici l'élément pour les options supplémentaires -->
+            <h4>Options supplémentaires</h4>
+            <ul id="previewOptions"></ul> <!-- Élément manquant ajouté -->
+
+            <p id="previewWarningMessage" style="display:none;"></p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer id="actionButtons">
+    <button id="toggleCenterColumn" class="small-button">Créateur de formule</button>
+    <button id="updateDataButton">Mettre à jour les données</button>
+    <button id="saveDataButton" data-action="save">Sauvegarder les modifications</button>
+    <button id="resetButton">Réinitialiser</button>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="dark_mode.js" defer></script>
+  <script src="admin-script.js" defer></script>
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const body = document.body;
+
+  darkModeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    // Optionnel : sauvegarder la préférence de l'utilisateur
+    localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+  });
+
+  // Vérifier si l'utilisateur avait précédemment activé le mode sombre
+  if (localStorage.getItem('darkMode') === 'true') {
+    body.classList.add('dark-mode');
+  }
+});
+  </script>
+</body>
+</html>
