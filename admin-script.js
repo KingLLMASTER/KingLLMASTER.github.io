@@ -1231,7 +1231,7 @@
         if ("showSaveFilePicker" in window) {
             this.saveWithFileSystemAccess(fileContent);
         } else {
-            this.downloadFile(fileContent, "constants.js");
+            this.downloadFile(fileContent, "data.js");
         }
     }
     downloadFile(content, filename){
@@ -1247,7 +1247,7 @@
     async saveWithFileSystemAccess(content){
         try{
             let fileHandle = await window.showSaveFilePicker({
-                suggestedName: "constants.js",
+                suggestedName: "data.js",
                 types: [{
                     description: "JavaScript File",
                     accept: {"text/javascript": [".js"]}
@@ -1259,7 +1259,7 @@
             alert("Fichier sauvegardé avec succès !");
         } catch(error){
             console.warn("Impossible d'utiliser l'API File System Access. Utilisation de la méthode de téléchargement classique.", error);
-            this.downloadFile(content, "constants.js");
+            this.downloadFile(content, "data.js");
         }
     }
     updateData(){
