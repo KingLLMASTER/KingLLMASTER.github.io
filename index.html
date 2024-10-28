@@ -1,188 +1,205 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Administration des Packs</title>
-  <link href="admin-styles.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration des Packs</title>
+    <!-- Lien vers votre fichier CSS -->
+    <link href="admin-styles.css" rel="stylesheet">
+    <!-- Lien vers les icônes Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Lien vers la police Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <div class="header-left"></div>
-    <h1>Administration des Packs</h1>
-    <div class="header-icons">
-      <span aria-label="Verrouiller l'administration" class="material-icons" id="lockIcon" role="button" tabindex="0" onclick="promptForCode()">lock</span>
-      <span aria-label="Basculer le mode sombre" class="material-icons" id="darkModeToggle" role="button" tabindex="0">dark_mode</span>
-    </div>
-  </header>
-  
-  <main>
-    <div class="container">
-      <!-- Colonne de gauche : Modifications -->
-      <div class="left-column">
-        <!-- Section de Chargement de Fichier -->
-        <section id="fileLoader">
-          <h2>Charger le fichier de données (optionnel)</h2>
-          <label for="fileInput">Fichier de données (optionnel)</label>
-          <input id="fileInput" type="file" accept=".js" aria-describedby="fileHelp">
-          <p id="fileHelp">Vous pouvez commencer à créer de nouvelles données sans charger de fichier.</p>
-        </section>
-        
-        <!-- Grille de Sélection 2x2 -->
-        <div class="selection-grid">
-          <!-- Sélection de Pack -->
-          <div class="selection-box">
-            <h3>Sélectionnez un Pack</h3>
-            <label for="packSelect">Pack</label>
-            <select id="packSelect">
-              <option value="">Sélectionnez un pack</option>
-            </select>
-            <button id="renamePackButton">Renommer le pack</button>
-            <button id="deletePackButton">Supprimer le pack</button>
-          </div>
-          
-          <!-- Sélection de Jeu -->
-          <div class="selection-box">
-            <h3>Sélectionnez un Jeu</h3>
-            <label for="gameSelect">Jeu</label>
-            <select id="gameSelect">
-              <option value="">Sélectionnez un jeu</option>
-            </select>
-            <button id="renameGameButton">Renommer le jeu</button>
-            <button id="deleteGameButton">Supprimer le jeu</button>
-          </div>
-          
-          <!-- Sélection d'Option -->
-          <div class="selection-box">
-            <h3>Sélectionnez une Option</h3>
-            <label for="optionSelect">Option</label>
-            <select id="optionSelect">
-              <option value="">Sélectionnez une option</option>
-            </select>
-            <button id="renameOptionButton">Renommer l'option</button>
-            <button id="deleteOptionButton">Supprimer l'option</button>
-          </div>
-          
-          <!-- Sélection de Tranche d'Âge -->
-          <div class="selection-box">
-            <h3>Sélectionnez une Tranche d'Âge</h3>
-            <label for="ageSelect">Âge</label>
-            <select id="ageSelect">
-              <option value="">Sélectionnez une tranche d'âge</option>
-            </select>
-          </div>
+    <!-- En-tête -->
+    <header>
+        <div class="header-left"></div>
+        <h1>Administration des Packs</h1>
+        <div class="header-icons">
+            <span aria-label="Verrouiller l'administration" class="material-icons" id="lockIcon" role="button" tabindex="0">lock</span>
+            <span aria-label="Basculer le mode sombre" class="material-icons" id="darkModeToggle" role="button" tabindex="0">dark_mode</span>
         </div>
-        
-        <!-- Section des Prix -->
-        <section id="priceSection">
-          <h2>Prix par Tranche d'Âge</h2>
-          <div id="priceContainer">
-            <!-- Les champs de prix seront générés dynamiquement -->
-          </div>
-        </section>
-        
-        <!-- Section des Liens de Réservation -->
-        <section id="linkSection">
-          <h2>Lien de Réservation</h2>
-          <div id="linkInputContainer">
-            <!-- Les champs de lien seront générés dynamiquement -->
-          </div>
-          <button id="updateLinkButton">Mettre à jour le lien</button>
-        </section>
-        
-        <!-- Section Multilingue -->
-        <section id="languageSection">
-          <h2>Contenu Multilingue</h2>
-          
-          <div class="language-tabs">
-            <!-- Les onglets de langue seront générés dynamiquement ici -->
-          </div>
-          
-          <h3>Temps sur place (unifié)</h3>
-          <input id="timeOnSiteValue" placeholder="Entrez le temps en minutes" min="1" type="number">
-          
-          <div id="languageContentsContainer">
-            <!-- Les sections de contenu linguistique seront générées dynamiquement ici -->
-          </div>
-        </section>
-      </div>
-      
-      <!-- Colonne Centrale : Création de Pack/Formule -->
-      <div class="center-column" id="centerColumn">
-        <section id="creationTools">
-          <!-- Création de Nouveau Pack -->
-          <section id="newPackCreation">
-            <h2>Création de nouvelles formules</h2>
-            <label for="nouveauPack">Nom du nouveau pack</label>
-            <input type="text" id="nouveauPack" placeholder="Nom du nouveau pack">
-            <h3>Sélectionnez les tranches d'âge</h3>
-            <div id="agesCheckboxes">
-              <label><input type="checkbox" value="7-12"> 7-12</label>
-              <label><input type="checkbox" value="13-18+étudiant"> 13-18 + étudiant</label>
-              <label><input type="checkbox" value="+18"> +18</label>
-              <label><input type="checkbox" value="sans âge"> Sans âge</label>
+    </header>
+
+    <!-- Contenu principal -->
+    <main>
+        <div class="container">
+            <!-- Colonne de gauche -->
+            <div class="left-column">
+                <!-- Section de chargement du fichier -->
+                <section id="fileLoader">
+                    <h2>Chargez le fichier de données (optionnel)</h2>
+                    <label for="fileInput">Fichier de données (optionnel)</label>
+                    <input id="fileInput" type="file" accept=".js" aria-describedby="fileHelp">
+                    <p id="fileHelp">Vous pouvez commencer à créer de nouvelles données sans charger de fichier.</p>
+                </section>
+
+                <!-- Grille de sélection -->
+                <div class="selection-grid">
+                    <!-- Sélection du Pack -->
+                    <div class="selection-box">
+                        <h3>Sélectionnez un Pack</h3>
+                        <label for="packSelect">Pack</label>
+                        <select id="packSelect">
+                            <option value="">Sélectionnez un pack</option>
+                        </select>
+                        <button id="renamePackButton">Renommer le pack</button>
+                        <button id="deletePackButton">Supprimer le pack</button>
+                    </div>
+
+                    <!-- Sélection du Jeu -->
+                    <div class="selection-box">
+                        <h3>Sélectionnez un Jeu</h3>
+                        <label for="gameSelect">Jeu</label>
+                        <select id="gameSelect">
+                            <option value="">Sélectionnez un jeu</option>
+                        </select>
+                        <button id="renameGameButton">Renommer le jeu</button>
+                        <button id="deleteGameButton">Supprimer le jeu</button>
+                    </div>
+
+                    <!-- Sélection de l'Option -->
+                    <div class="selection-box">
+                        <h3>Sélectionnez une Option</h3>
+                        <label for="optionSelect">Option</label>
+                        <select id="optionSelect">
+                            <option value="">Sélectionnez une option</option>
+                        </select>
+                        <button id="renameOptionButton">Renommer l'option</button>
+                        <button id="deleteOptionButton">Supprimer l'option</button>
+                    </div>
+
+                    <!-- Sélection de la Tranche d'Âge -->
+                    <div class="selection-box">
+                        <h3>Sélectionnez une Tranche d'Âge</h3>
+                        <label for="ageSelect">Âge</label>
+                        <select id="ageSelect">
+                            <option value="">Sélectionnez une tranche d'âge</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Section des Prix -->
+                <section id="priceSection">
+                    <h2>Prix par Tranche d'Âge</h2>
+                    <div id="priceContainer"></div>
+                </section>
+
+                <!-- Section des Liens de Réservation -->
+                <section id="linkSection">
+                    <h2>Lien de Réservation</h2>
+                    <div id="linkInputContainer"></div>
+                    <button id="updateLinkButton">Mettre à jour le lien</button>
+                </section>
+
+                <!-- Section du Contenu Multilingue -->
+                <section id="languageSection">
+                    <h2>Contenu Multilingue</h2>
+                    <div class="language-tabs"></div>
+
+                    <h3>Temps sur place (unifié)</h3>
+                    <input id="timeOnSiteValue" type="number" min="1" placeholder="Entrez le temps en minutes">
+
+                    <div id="languageContentsContainer">
+                        <!-- Les contenus multilingues seront générés dynamiquement -->
+                    </div>
+                </section>
             </div>
-            <button id="creerNouveauPackButton">Créer nouveau pack</button>
-          </section>
-          
-          <!-- Ajout de Jeu ou Option à un Pack Existant -->
-          <section id="newGameOption">
-            <h3>Ajout de jeu ou option à un pack existant</h3>
-            <label for="packExistantSelect">Pack existant</label>
-            <select id="packExistantSelect">
-              <option value="">Sélectionnez un pack</option>
-            </select>
-            <label for="jeuExistantSelect">Jeu existant</label>
-            <select id="jeuExistantSelect">
-              <option value="">Sélectionnez un jeu</option>
-            </select>
-            <label for="nouveauJeuInput">Nom du nouveau jeu</label>
-            <input type="text" id="nouveauJeuInput" placeholder="Nom du nouveau jeu">
-            <label for="nouvelleOptionInput">Nouvelle option</label>
-            <input type="text" id="nouvelleOptionInput" placeholder="Nouvelle option">
-            <button id="ajouterJeuOptionButton">Ajouter jeu/option</button>
-          </section>
-          
-          <!-- Gestion des Langues -->
-          <section id="languageManagement">
-            <h3>Ajouter une nouvelle langue</h3>
-            <label for="newLanguageCode">Code de la langue</label>
-            <input type="text" id="newLanguageCode" placeholder="Code de la langue (e.g., 'es')">
-            <button id="addLanguageButton">Ajouter la langue</button>
-          </section>
-        </section>
-      </div>
-      
-      <!-- Colonne de droite : Aperçu -->
-      <div class="right-column">
-        <section id="previewPanel">
-          <h2>Aperçu</h2>
-          <div id="previewCard" style="display: none;">
-            <h3 id="previewTitle">Titre du Pack</h3>
-            <p id="previewAges">Tranches d'âge : Non défini</p>
-            <p id="previewTime">⏱️ Temps sur place : Non défini</p>
-            <p id="previewPrice">Prix</p>
-            <h4>Inclus</h4>
-            <ul id="previewInclus"></ul>
-            <h4>Options supplémentaires</h4>
-            <ul id="previewOptions"></ul>
-            <p id="previewWarningMessage"></p>
-          </div>
-        </section>
-      </div>
-    </div>
-  </main>
-  
-  <footer id="actionButtons">
-    <button id="toggleCenterColumn" class="small-button">Créateur de formule</button>
-    <button id="updateDataButton">Mettre à jour les données</button>
-    <button id="saveDataButton" data-action="save">Sauvegarder les modifications</button>
-    <button id="resetButton">Réinitialiser</button>
-  </footer>
-  
-  <!-- Scripts -->
-  <script defer src="dark_mode.js"></script>
-  <script defer src="admin-script.js"></script>
+
+            <!-- Colonne centrale (création de nouvelles formules) -->
+            <div class="center-column hidden" id="centerColumn">
+                <section id="creationTools">
+                    <!-- Création de nouvelles formules -->
+                    <section id="newPackCreation">
+                        <h2>Création de nouvelles formules</h2>
+                        <label for="nouveauPack">Nom du nouveau pack</label>
+                        <input type="text" id="nouveauPack" placeholder="Nom du nouveau pack">
+
+                        <h3>Sélectionnez les tranches d'âge</h3>
+                        <div id="agesCheckboxes">
+                            <label><input type="checkbox" value="7-12"> 7-12</label>
+                            <label><input type="checkbox" value="13-18+étudiant"> 13-18 + étudiant</label>
+                            <label><input type="checkbox" value="+18"> +18</label>
+                            <label><input type="checkbox" value="sans âge"> Sans âge</label>
+                        </div>
+
+                        <!-- Section des jeux existants -->
+                        <h3 id="toggleJeuxExistantsHeader" style="cursor: pointer;">
+                            <span class="material-icons" id="toggleJeuxExistantsIcon">expand_less</span>
+                            Sélectionnez des jeux existants à associer :
+                        </h3>
+                        <div id="jeuxExistantsContainer">
+                            <!-- Les jeux seront insérés ici dynamiquement -->
+                        </div>
+
+                        <button id="creerNouveauPackButton">Créer nouveau pack</button>
+                    </section>
+
+                    <!-- Ajout de jeu ou option à un pack existant -->
+                    <section id="newGameOption">
+                        <h3>Ajout de jeu ou option à un pack existant</h3>
+                        <label for="packExistantSelect">Pack existant</label>
+                        <select id="packExistantSelect">
+                            <option value="">Sélectionnez un pack</option>
+                        </select>
+
+                        <label for="jeuExistantSelect">Jeu existant</label>
+                        <select id="jeuExistantSelect">
+                            <option value="">Sélectionnez un jeu</option>
+                        </select>
+
+                        <label for="nouveauJeuInput">Ou entrez le nom d'un nouveau jeu :</label>
+                        <input type="text" id="nouveauJeuInput" placeholder="Nom du nouveau jeu">
+
+                        <label for="nouvelleOptionInput">Nom de la nouvelle option</label>
+                        <input type="text" id="nouvelleOptionInput" placeholder="Nom de la nouvelle option">
+
+                        <button id="ajouterJeuOptionButton">Ajouter jeu/option</button>
+                    </section>
+
+                    <!-- Gestion des langues -->
+                    <section id="languageManagement">
+                        <h3>Ajouter une nouvelle langue</h3>
+                        <label for="newLanguageCode">Code de la langue</label>
+                        <input type="text" id="newLanguageCode" placeholder="Code de la langue (e.g., 'es')">
+                        <button id="addLanguageButton">Ajouter la langue</button>
+                    </section>
+                </section>
+            </div>
+
+            <!-- Colonne de droite (aperçu) -->
+            <div class="right-column">
+                <section id="previewPanel">
+                    <h2>Aperçu</h2>
+                    <div id="previewCard" style="display: none;">
+                        <h3 id="previewTitle">Titre du Pack</h3>
+                        <p id="previewAges">Tranches d'âge : Non défini</p>
+                        <p id="previewTime">⏱️ Temps sur place : Non défini</p>
+                        <p id="previewPrice">Prix</p>
+                        <h4>Inclus</h4>
+                        <ul id="previewInclus"></ul>
+                        <h4>Options supplémentaires</h4>
+                        <ul id="previewOptions"></ul>
+                        <p id="previewWarningMessage"></p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pied de page avec les boutons d'action -->
+    <footer id="actionButtons">
+        <button id="toggleCenterColumn" class="small-button" aria-expanded="false" aria-controls="centerColumn">
+            Créateur de formule
+        </button>
+        <button id="updateDataButton">Mettre à jour les données</button>
+        <button id="saveDataButton" data-action="save">Sauvegarder les modifications</button>
+        <button id="resetButton">Réinitialiser</button>
+    </footer>
+
+    <!-- Inclusion des scripts JavaScript -->
+    <script defer src="dark_mode.js"></script>
+    <script defer src="admin-script.js"></script>
 </body>
 </html>
