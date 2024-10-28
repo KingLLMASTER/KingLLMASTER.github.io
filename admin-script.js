@@ -971,84 +971,83 @@
         return null;
     }
     creerNouveauPack() {
-        let nouveauPackNom = document.getElementById("nouveauPack").value.trim();
-        if (!nouveauPackNom) {
+        let nomPack = document.getElementById("nouveauPack").value.trim();
+        if (!nomPack) {
             alert("Veuillez entrer un nom pour le nouveau pack.");
             return;
         }
-    
-        let agesSelectionnes = Array.from(document.querySelectorAll('#agesCheckboxes input[type="checkbox"]:checked')).map(el => el.value);
-        if (agesSelectionnes.length === 0) {
+        
+        let tranchesAge = Array.from(document.querySelectorAll('#agesCheckboxes input[type="checkbox"]:checked')).map(el => el.value);
+        if (tranchesAge.length === 0) {
             alert("Veuillez sélectionner au moins une tranche d'âge.");
             return;
         }
     
-        let optionCheckboxes = Array.from(document.querySelectorAll('#jeuxExistantsContainer .option-checkbox:checked'));
-        if (optionCheckboxes.length === 0) {
-            alert("Veuillez sélectionner au moins une option de jeu.");
-            return;
-        }
-    
-        let nouveauPackId = `pack_${Date.now()}`;
-        this.data.packs[nouveauPackId] = {
+        // Identifiant unique pour le nouveau pack
+        let packId = `pack_${Date.now()}`;
+        this.data.packs[packId] = {
             names: {},
-            ages: agesSelectionnes,
+            ages: tranchesAge,
             games: {},
             inclusions: {},
             additionalOptions: {},
             warningMessages: {}
         };
     
-        this.availableLanguages.forEach(lang => {
-            this.data.packs[nouveauPackId].names[lang] = nouveauPackNom;
-            this.data.packs[nouveauPackId].inclusions[lang] = [];
-            this.data.packs[nouveauPackId].additionalOptions[lang] = [];
-            this.data.packs[nouveauPackId].warningMessages[lang] = "";
+        // Initialiser les langues pour le nouveau pack
+        this.availableLanguages.forEach(langue => {
+            this.data.packs[packId].names[langue] = nomPack;
+            this.data.packs[packId].inclusions[langue] = [];
+            this.data.packs[packId].additionalOptions[langue] = [];
+            this.data.packs[packId].warningMessages[langue] = "";
         });
     
-        // Regrouper les options par jeu
-        let jeuxAvecOptions = {};
-        optionCheckboxes.forEach(optionCheckbox => {
-            let gameName = optionCheckbox.dataset.gameName;
-            let optionName = optionCheckbox.parentElement.textContent.trim();
+        // Création de jeux et options facultatifs
+        let jeuxExistants = Array.from(document.querySelectorAll("#jeuxExistantsContainer .option-checkbox:checked"));
+        if (jeuxExistants.length > 0) {
+            let jeuxOptions = {};
+            
+            jeuxExistants.forEach(optionElement => {
+                let nomJeu = optionElement.dataset.gameName;
+                let nomOption = optionElement.parentElement.textContent.trim();
     
-            if (!jeuxAvecOptions[gameName]) {
-                jeuxAvecOptions[gameName] = [];
-            }
-            jeuxAvecOptions[gameName].push(optionName);
-        });
-    
-        // Ajouter les jeux et options sélectionnés au nouveau pack
-        Object.entries(jeuxAvecOptions).forEach(([gameName, optionNames]) => {
-            // Générer un identifiant unique pour le jeu
-            let newGameId = `game_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
-            this.data.packs[nouveauPackId].games[newGameId] = {
-                names: {},
-                options: {}
-            };
-    
-            this.availableLanguages.forEach(lang => {
-                this.data.packs[nouveauPackId].games[newGameId].names[lang] = gameName;
-            });
-    
-            optionNames.forEach(optionName => {
-                // Générer un identifiant unique pour l'option
-                let newOptionId = `option_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
-    
-                // Rechercher les données de l'option originale
-                let optionData = this.findOptionByName(gameName, optionName);
-    
-                if (optionData) {
-                    this.data.packs[nouveauPackId].games[newGameId].options[newOptionId] = { ...optionData };
+                if (!jeuxOptions[nomJeu]) {
+                    jeuxOptions[nomJeu] = [];
                 }
+                jeuxOptions[nomJeu].push(nomOption);
             });
-        });
+    
+            Object.entries(jeuxOptions).forEach(([nomJeu, options]) => {
+                let gameId = `game_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+                this.data.packs[packId].games[gameId] = {
+                    names: {},
+                    options: {}
+                };
+    
+                this.availableLanguages.forEach(langue => {
+                    this.data.packs[packId].games[gameId].names[langue] = nomJeu;
+                });
+    
+                options.forEach(nomOption => {
+                    let optionId = `option_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+                    this.data.packs[packId].games[gameId].options[optionId] = {
+                        names: {},
+                        prices: {},
+                        timeOnSite: 0
+                    };
+    
+                    this.availableLanguages.forEach(langue => {
+                        this.data.packs[packId].games[gameId].options[optionId].names[langue] = nomOption;
+                    });
+                });
+            });
+        }
     
         alert("Le nouveau pack a été créé avec succès.");
         this.initializeInterface();
-        this.elements.packSelect.value = nouveauPackId;
+        this.elements.packSelect.value = packId;
         this.handlePackSelectionChange();
-    }
+    }    
     updateJeuxExistantsSelect() {
         let container = document.getElementById("jeuxExistantsContainer");
         if (!container) return;
