@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShiftBase - Gestion du Personnel</title>
+    <link rel="stylesheet" href="shiftbase-styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">
+            <span class="material-icons">schedule</span>
+            <h2>ShiftBase</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <span class="material-icons">dashboard</span>
+                <span>Tableau de bord</span>
+            </a>
+            <a href="#" class="nav-item" data-page="employees">
+                <span class="material-icons">people</span>
+                <span>Employés</span>
+            </a>
+            <a href="#" class="nav-item" data-page="schedule">
+                <span class="material-icons">calendar_today</span>
+                <span>Planning</span>
+            </a>
+            <a href="#" class="nav-item" data-page="timetracking">
+                <span class="material-icons">access_time</span>
+                <span>Suivi du temps</span>
+            </a>
+            <a href="#" class="nav-item" data-page="absences">
+                <span class="material-icons">event_busy</span>
+                <span>Absences</span>
+            </a>
+            <a href="#" class="nav-item" data-page="reports">
+                <span class="material-icons">analytics</span>
+                <span>Rapports</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1 id="pageTitle">Tableau de bord</h1>
+            </div>
+            <div class="header-right">
+                <div class="current-date" id="currentDate"></div>
+                <button class="icon-btn" id="notificationBtn">
+                    <span class="material-icons">notifications</span>
+                    <span class="badge">3</span>
+                </button>
+                <div class="user-profile">
+                    <span class="material-icons">account_circle</span>
+                    <span>Admin</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Page -->
+        <div class="page-content" id="dashboardPage">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <span class="material-icons">people</span>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalEmployees">0</h3>
+                        <p>Employés actifs</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <span class="material-icons">check_circle</span>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="presentToday">0</h3>
+                        <p>Présents aujourd'hui</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <span class="material-icons">event_busy</span>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="absentToday">0</h3>
+                        <p>Absents aujourd'hui</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <span class="material-icons">schedule</span>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalHours">0h</h3>
+                        <p>Heures cette semaine</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Planning de la semaine</h3>
+                    <div id="weekSchedulePreview"></div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Dernières activités</h3>
+                    <div id="recentActivity"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employees Page -->
+        <div class="page-content hidden" id="employeesPage">
+            <div class="page-header">
+                <button class="btn-primary" id="addEmployeeBtn">
+                    <span class="material-icons">add</span>
+                    Ajouter un employé
+                </button>
+                <div class="search-box">
+                    <span class="material-icons">search</span>
+                    <input type="text" id="searchEmployee" placeholder="Rechercher un employé...">
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Poste</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeesTableBody">
+                        <!-- Employee rows will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Schedule Page -->
+        <div class="page-content hidden" id="schedulePage">
+            <div class="page-header">
+                <div class="week-navigation">
+                    <button class="icon-btn" id="prevWeek">
+                        <span class="material-icons">chevron_left</span>
+                    </button>
+                    <span id="currentWeek">Semaine du 13 Nov 2025</span>
+                    <button class="icon-btn" id="nextWeek">
+                        <span class="material-icons">chevron_right</span>
+                    </button>
+                </div>
+                <button class="btn-primary" id="addShiftBtn">
+                    <span class="material-icons">add</span>
+                    Ajouter un shift
+                </button>
+            </div>
+
+            <div class="schedule-grid" id="scheduleGrid">
+                <!-- Schedule will be generated here -->
+            </div>
+        </div>
+
+        <!-- Time Tracking Page -->
+        <div class="page-content hidden" id="timetrackingPage">
+            <div class="time-clock">
+                <div class="clock-display">
+                    <h2 id="currentTime">00:00:00</h2>
+                    <p id="clockDate"></p>
+                </div>
+                <div class="clock-actions">
+                    <button class="btn-success" id="clockInBtn">
+                        <span class="material-icons">login</span>
+                        Pointer l'arrivée
+                    </button>
+                    <button class="btn-danger" id="clockOutBtn" disabled>
+                        <span class="material-icons">logout</span>
+                        Pointer la sortie
+                    </button>
+                </div>
+            </div>
+
+            <div class="timesheet-container">
+                <h3>Relevé d'heures de la semaine</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Employé</th>
+                                <th>Date</th>
+                                <th>Arrivée</th>
+                                <th>Sortie</th>
+                                <th>Heures travaillées</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timesheetTableBody">
+                            <!-- Timesheet rows will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Absences Page -->
+        <div class="page-content hidden" id="absencesPage">
+            <div class="page-header">
+                <button class="btn-primary" id="requestAbsenceBtn">
+                    <span class="material-icons">add</span>
+                    Demander une absence
+                </button>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">Toutes</button>
+                    <button class="filter-tab" data-filter="pending">En attente</button>
+                    <button class="filter-tab" data-filter="approved">Approuvées</button>
+                    <button class="filter-tab" data-filter="rejected">Refusées</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Employé</th>
+                            <th>Type</th>
+                            <th>Du</th>
+                            <th>Au</th>
+                            <th>Durée</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="absencesTableBody">
+                        <!-- Absence rows will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Reports Page -->
+        <div class="page-content hidden" id="reportsPage">
+            <div class="reports-grid">
+                <div class="report-card">
+                    <h3>Heures par employé</h3>
+                    <div class="chart-container" id="employeeHoursChart"></div>
+                </div>
+                <div class="report-card">
+                    <h3>Taux de présence</h3>
+                    <div class="chart-container" id="attendanceChart"></div>
+                </div>
+                <div class="report-card">
+                    <h3>Coûts de personnel</h3>
+                    <div class="chart-container" id="costChart"></div>
+                </div>
+            </div>
+
+            <div class="export-section">
+                <h3>Exporter les rapports</h3>
+                <button class="btn-secondary">
+                    <span class="material-icons">file_download</span>
+                    Exporter en PDF
+                </button>
+                <button class="btn-secondary">
+                    <span class="material-icons">table_chart</span>
+                    Exporter en Excel
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for Adding Employee -->
+    <div class="modal hidden" id="employeeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Ajouter un employé</h2>
+                <button class="close-modal" id="closeEmployeeModal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <form id="employeeForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">Prénom *</label>
+                        <input type="text" id="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Nom *</label>
+                        <input type="text" id="lastName" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Téléphone</label>
+                        <input type="tel" id="phone">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="position">Poste *</label>
+                        <input type="text" id="position" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Département</label>
+                        <select id="department">
+                            <option value="operations">Opérations</option>
+                            <option value="sales">Ventes</option>
+                            <option value="support">Support</option>
+                            <option value="management">Management</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hourlyRate">Taux horaire (€)</label>
+                        <input type="number" id="hourlyRate" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Statut</label>
+                        <select id="status">
+                            <option value="active">Actif</option>
+                            <option value="inactive">Inactif</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="cancelEmployeeBtn">Annuler</button>
+                    <button type="submit" class="btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Adding Shift -->
+    <div class="modal hidden" id="shiftModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Ajouter un shift</h2>
+                <button class="close-modal" id="closeShiftModal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <form id="shiftForm">
+                <div class="form-group">
+                    <label for="shiftEmployee">Employé *</label>
+                    <select id="shiftEmployee" required>
+                        <option value="">Sélectionner un employé</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="shiftDate">Date *</label>
+                    <input type="date" id="shiftDate" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="shiftStart">Heure de début *</label>
+                        <input type="time" id="shiftStart" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shiftEnd">Heure de fin *</label>
+                        <input type="time" id="shiftEnd" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="shiftNote">Note</label>
+                    <textarea id="shiftNote" rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="cancelShiftBtn">Annuler</button>
+                    <button type="submit" class="btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Absence Request -->
+    <div class="modal hidden" id="absenceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Demande d'absence</h2>
+                <button class="close-modal" id="closeAbsenceModal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <form id="absenceForm">
+                <div class="form-group">
+                    <label for="absenceEmployee">Employé *</label>
+                    <select id="absenceEmployee" required>
+                        <option value="">Sélectionner un employé</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="absenceType">Type d'absence *</label>
+                    <select id="absenceType" required>
+                        <option value="vacation">Congés payés</option>
+                        <option value="sick">Maladie</option>
+                        <option value="personal">Congé personnel</option>
+                        <option value="unpaid">Sans solde</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="absenceStart">Date de début *</label>
+                        <input type="date" id="absenceStart" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="absenceEnd">Date de fin *</label>
+                        <input type="date" id="absenceEnd" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="absenceReason">Raison</label>
+                    <textarea id="absenceReason" rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="cancelAbsenceBtn">Annuler</button>
+                    <button type="submit" class="btn-primary">Soumettre</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="shiftbase-app.js"></script>
+</body>
+</html>
